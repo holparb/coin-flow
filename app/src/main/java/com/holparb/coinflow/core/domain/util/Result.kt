@@ -1,4 +1,4 @@
-package com.holparb.coinflow.util
+package com.holparb.coinflow.core.domain.util
 
 typealias DomainError = Error
 
