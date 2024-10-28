@@ -1,10 +1,9 @@
 package com.holparb.coinflow.crypto.presentation.model
 
-import android.icu.number.NumberFormatter
 import android.icu.text.NumberFormat
 import androidx.annotation.DrawableRes
 import com.holparb.coinflow.crypto.domain.model.Coin
-import com.holparb.coinflow.util.getDrawableIdForCoin
+import com.holparb.coinflow.core.presentation.util.getDrawableIdForCoin
 import java.util.Locale
 
 data class CoinUi(
