@@ -1,7 +1,7 @@
 package com.holparb.coinflow.crypto.presentation.coin_list
 
-import com.holparb.coinflow.crypto.presentation.model.CoinUi
+import com.holparb.coinflow.core.domain.util.NetworkError
 
 sealed interface CoinListEvent {
-    data class OnCoinClick(val coinUi: CoinUi): CoinListEvent
+    data class Error(val error: NetworkError): CoinListEvent
 }
