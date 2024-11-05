@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.holparb.coinflow.core.presentation.util.ObserveAsEvents
 import com.holparb.coinflow.core.presentation.util.toString
+import com.holparb.coinflow.crypto.presentation.coin_detail.CoinDetailScreen
 import com.holparb.coinflow.crypto.presentation.coin_list.CoinListEvent
 import com.holparb.coinflow.crypto.presentation.coin_list.CoinListScreen
 import com.holparb.coinflow.crypto.presentation.coin_list.CoinListViewModel
@@ -41,10 +42,21 @@ import org.koin.androidx.compose.koinViewModel
                             }
                         }
                     }
-                    CoinListScreen(
-                        state = state,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    when {
+                        state.selectedCoin != null -> {
+                            CoinDetailScreen(
+                                state = state,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                        else -> {
+                            CoinListScreen(
+                                state = state,
+                                modifier = Modifier.padding(innerPadding),
+                                onAction = viewModel::onAction
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -23,6 +23,7 @@ import com.holparb.coinflow.ui.theme.CoinFlowTheme
 @Composable
 fun CoinListScreen(
     state: CoinListState,
+    onAction: (CoinListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if(state.isLoading) {
@@ -40,7 +41,9 @@ fun CoinListScreen(
             items(state.coins) { item ->
                 CoinListItem(
                     item = item,
-                    onClick = {},
+                    onClick = {
+                        onAction(CoinListAction.OnCoinClick(item))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
                 HorizontalDivider()
@@ -59,6 +62,7 @@ private fun CoinListScreenPreview() {
                     previewCoin.toCoinUi()
                 }
             ),
+            onAction = {},
             modifier = Modifier.background(MaterialTheme.colorScheme.background)
         )
     }
