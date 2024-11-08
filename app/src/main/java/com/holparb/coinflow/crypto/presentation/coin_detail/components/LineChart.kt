@@ -102,10 +102,32 @@ fun LineChart(
                 (maxXLabelHeight + 2 * verticalPaddingInPx
                         + xLabelLineHeight + xAxisLabelSpacingPx)
 
+        // Y label calculation
+        val labelViewPortHeightPx = viewPortHeightPx + xLabelLineHeight
+        val labelCountExcludingLastLabel = ((labelViewPortHeightPx / (xLabelLineHeight + minLabelSpacingYPx))).toInt()
+
+        val valueIncrement = (maxYValue - minYValue) / labelCountExcludingLastLabel
+
+        val yLabels = (0 .. labelCountExcludingLastLabel).map { index ->
+            ValueLabel(
+                value = maxYValue - (valueIncrement * index),
+                unit = unit
+            )
+        }
+
+        val yLabelTextLayoutResults = yLabels.map {
+            measurer.measure(
+                text = it.formatted(),
+                style = textStyle
+            )
+        }
+
+        val maxYLabelWidth = yLabelTextLayoutResults.maxOfOrNull { it.size.width } ?: 0
+
         val viewPortTopY = verticalPaddingInPx + xLabelLineHeight + 10f
         val viewPortRightX = size.width
         val viewPortBottomY = viewPortTopY + viewPortHeightPx
-        val viewPortLeftX = 2f * horizontalPaddingPx
+        val viewPortLeftX = 2f * horizontalPaddingPx + maxYLabelWidth
         val viewPort = Rect(
             left = viewPortLeftX,
             right = viewPortRightX,
@@ -126,40 +148,24 @@ fun LineChart(
                 topLeft = Offset(
                     x = viewPortLeftX + xAxisLabelSpacingPx / 2f + xLabelWidth * index,
                     y = viewPortBottomY + xAxisLabelSpacingPx
-                )
-            )
-        }
-
-        val labelViewPortHeightPx = viewPortHeightPx + xLabelLineHeight
-        val labelCountExcludingLastLabel = ((labelViewPortHeightPx / (xLabelLineHeight + minLabelSpacingYPx))).toInt()
-
-        val valueIncrement = (maxYValue - minYValue) / labelCountExcludingLastLabel
-
-        val yLabels = (0 .. labelCountExcludingLastLabel).map { index ->
-            ValueLabel(
-                value = maxYValue - (valueIncrement * index),
-                unit = unit
-            )
-        }
-
-        val yLabelTextLayoutResults = yLabels.map {
-            measurer.measure(
-                text = it.formatted(),
-                style = textStyle
+                ),
+                color = if(index == selectedDataPointIndex)
+                    style.selectedColor else style.unselectedColor
             )
         }
 
         val heightRequiredForLabels = xLabelLineHeight * (labelCountExcludingLastLabel + 1)
         val remainingHeightForLabels = viewPortHeightPx - heightRequiredForLabels
         val spaceBetweenLabels = remainingHeightForLabels / labelCountExcludingLastLabel
-        val maxYLabelWidth = yLabelTextLayoutResults.maxOfOrNull { it.size.width } ?: 0
+
         yLabelTextLayoutResults.forEachIndexed { index, result  ->
             drawText(
                 textLayoutResult = result,
                 topLeft = Offset(
                     x = horizontalPaddingPx + maxYLabelWidth - result.size.width.toFloat(),
                     y = viewPortTopY + index * (xLabelLineHeight + spaceBetweenLabels) - xLabelLineHeight / 2f
-                )
+                ),
+                color = style.unselectedColor
             )
         }
     }
