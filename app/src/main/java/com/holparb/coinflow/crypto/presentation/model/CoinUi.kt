@@ -2,8 +2,9 @@ package com.holparb.coinflow.crypto.presentation.model
 
 import android.icu.text.NumberFormat
 import androidx.annotation.DrawableRes
-import com.holparb.coinflow.crypto.domain.model.Coin
 import com.holparb.coinflow.core.presentation.util.getDrawableIdForCoin
+import com.holparb.coinflow.crypto.domain.model.Coin
+import com.holparb.coinflow.crypto.presentation.coin_detail.DataPoint
 import java.util.Locale
 
 data class CoinUi(
@@ -14,6 +15,7 @@ data class CoinUi(
     val marketCapUsd: DisplayableNumber,
     val priceUsd: DisplayableNumber,
     val changePercent24Hr: DisplayableNumber,
+    val coinPriceHistory: List<DataPoint> = emptyList<DataPoint>(),
     @DrawableRes val iconRes: Int
 )
 
